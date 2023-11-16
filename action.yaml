@@ -1,0 +1,67 @@
+name: 'Notification'
+description: 'Ajila Slack Notifications'
+inputs:
+  op_service_account_token:
+    required: true
+    description: 1Password service account token
+  slack_channel_id:
+    required: true
+    description: Slack channel ID for notifications
+  job_status:
+    required: false
+    description: Status of the calling workflow
+  workflow_completion_notification:
+    required: false
+    default: "false"
+    description: send notification on workflow run
+  workflow_name:
+    required: false
+    description: name of the workflow
+  workflow_status:
+    required: false
+    description: status of the previous workflow run
+  workflow_run_id:
+    required: false
+    description: ID of the previous workflow run
+runs:
+  using: "composite"
+
+  steps:
+  - name: Load notification secrets
+    id: op-load-repo-secrets
+    uses: 1password/load-secrets-action@v1.3.1
+    env:
+      OP_SERVICE_ACCOUNT_TOKEN: ${{ inputs.op_service_account_token }}
+      SLACK_WEBHOOK_URL: op://ajila_CICD/SLACK-GITHUB_NOTIFICATIONS/github-action-notification
+
+  - name: Notify status on Slack
+    if: inputs.workflow_completion_notification == 'true'
+    uses: slackapi/slack-github-action@v1.24.0
+    with:
+      payload: |
+        {
+          "channel_id": "${{ inputs.slack_channel_id }}",
+          "title": "The workflow '${{ inputs.workflow_name }}' completed with status *${{ inputs.workflow_status }}* for repo ${{ github.repository }}",
+          "job_status": "${{ job.status }}",
+          "job_name": "${{ github.job }}",
+          "workflow_run": "https://github.com/${{ github.repository }}/actions/runs/${{ inputs.workflow_run_id }}",
+          "github_repo": "https://github.com/${{ github.repository }}"
+        }
+    env:
+      SLACK_WEBHOOK_URL: ${{ env.SLACK_WEBHOOK_URL }}
+
+  - name: Send Slack message on failure
+    if: inputs.job_status == 'failure'
+    uses: slackapi/slack-github-action@v1.24.0
+    with:
+      payload: |
+        {
+          "channel_id": "${{ inputs.slack_channel_id }}",
+          "title": ":red_circle: job '${{ github.job }}' *failed* for repo ${{ github.repository }}",
+          "job_status": "${{ job.status }}",
+          "job_name": "${{ github.job }}",
+          "workflow_run": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}",
+          "github_repo": "https://github.com/${{ github.repository }}"
+        }
+    env:
+      SLACK_WEBHOOK_URL: ${{ env.SLACK_WEBHOOK_URL }}
