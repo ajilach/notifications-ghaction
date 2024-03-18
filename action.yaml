@@ -33,7 +33,7 @@ runs:
 
   - name: Notify status on Slack
     if: inputs.workflow_completion_notification == 'true'
-    uses: slackapi/slack-github-action@v1.24.0
+    uses: slackapi/slack-github-action@v1.25.0
     with:
       payload: |
         {
@@ -51,7 +51,7 @@ runs:
 
   - name: Send Slack message on failure
     if: inputs.job_status == 'failure'
-    uses: slackapi/slack-github-action@v1.24.0
+    uses: slackapi/slack-github-action@v1.25.0
     with:
       payload: |
         {
