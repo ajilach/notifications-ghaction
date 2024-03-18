@@ -46,8 +46,8 @@ runs:
           "job_name": "${{ github.job }}",
           "workflow_run": "https://github.com/${{ github.repository }}/actions/runs/${{ inputs.workflow_run_id }}",
           "github_repo": "https://github.com/${{ github.repository }}",
-          "github_trigger": "https://github.com/${{ github.event_name }}",
-          "github_repo_branch": "https://github.com/${{ github.ref }}"
+          "github_trigger": "${{ github.event_name }}",
+          "github_repo_branch": "${{ github.ref }}"
         }
     env:
       SLACK_WEBHOOK_URL: ${{ env.SLACK_WEBHOOK_URL }}
@@ -64,8 +64,8 @@ runs:
           "job_name": "${{ github.job }}",
           "workflow_run": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}",
           "github_repo": "https://github.com/${{ github.repository }}",
-          "github_trigger": "https://github.com/${{ github.event_name }}",
-          "github_repo_branch": "https://github.com/${{ github.ref }}"
+          "github_trigger": "${{ github.event_name }}",
+          "github_repo_branch": "${{ github.ref }}"
         }
     env:
       SLACK_WEBHOOK_URL: ${{ env.SLACK_WEBHOOK_URL }}
