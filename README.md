@@ -60,7 +60,6 @@ jobs:
           op_service_account_token: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
           slack_channel_id: "C064M8AVB5G"
           workflow_completion_notification: "true"
-          workflow_name: "Workflow test"
           workflow_status: "${{ github.event.workflow_run.conclusion }}"
           workflow_run_id: "${{ github.event.workflow_run.id }}"
 ```
