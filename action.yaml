@@ -38,7 +38,7 @@ runs:
       payload: |
         {
           "channel_id": "${{ inputs.slack_channel_id }}",
-          "title": "The workflow '${{ github.workflow }}' completed with status *${{ inputs.workflow_status }}* for repo ${{ github.repository }}",
+          "title": "The workflow '${{ github.workflow }}' completed with status *${{ job.status }}* for repo ${{ github.repository }}",
           "job_status": "${{ job.status }}",
           "job_name": "${{ github.job }}",
           "workflow_run": "https://github.com/${{ github.repository }}/actions/runs/${{ inputs.workflow_run_id }}",
