@@ -14,9 +14,6 @@ inputs:
     required: false
     default: "false"
     description: send notification on workflow run
-  workflow_name:
-    required: false
-    description: name of the workflow
   workflow_status:
     required: false
     description: status of the previous workflow run
@@ -41,7 +38,7 @@ runs:
       payload: |
         {
           "channel_id": "${{ inputs.slack_channel_id }}",
-          "title": "The workflow '${{ inputs.workflow_name }}' completed with status *${{ inputs.workflow_status }}* for repo ${{ github.repository }}",
+          "title": "The workflow '${{ github.workflow }}' completed with status *${{ inputs.workflow_status }}* for repo ${{ github.repository }}",
           "job_status": "${{ job.status }}",
           "job_name": "${{ github.job }}",
           "workflow_run": "https://github.com/${{ github.repository }}/actions/runs/${{ inputs.workflow_run_id }}",
