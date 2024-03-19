@@ -60,7 +60,6 @@ jobs:
           op_service_account_token: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
           slack_channel_id: "C064M8AVB5G"
           workflow_completion_notification: "true"
-          workflow_status: "${{ github.event.workflow_run.conclusion }}"
           workflow_run_id: "${{ github.event.workflow_run.id }}"
 ```
 
@@ -74,7 +73,5 @@ jobs:
 `job_status`: should always be set to `"${{ job.status }}"` so that the action has the job context. Only needed when reporting job status.
 
 `workflow_completion_notification`: can be set to either `"true"` or `"false"`. Note that we are passing in strings here since a composite action cannot accept boolean values. Set to `"true"` when reporting workflow status, omit otherwise (default is `"false"`).
-
-`workflow_status`: set to the status of the other workflow for which you would like to report: `"${{ github.event.workflow_run.conclusion }}"`.
 
 `workflow_run_id`: set to the ID of the other workflow for which you would like to report: `"${{ github.event.workflow_run.id }}"`.
