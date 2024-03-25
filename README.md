@@ -75,3 +75,5 @@ jobs:
 `workflow_completion_notification`: can be set to either `"true"` or `"false"`. Note that we are passing in strings here since a composite action cannot accept boolean values. Set to `"true"` when reporting workflow status, omit otherwise (default is `"false"`).
 
 `workflow_run_id`: set to the ID of the other workflow for which you would like to report: `"${{ github.event.workflow_run.id }}"`.
+
+`deploy_flag`: set to `true` if this is a CI/CD workflow and the deploy step has been executed as well. Leave blank if this is not a CI/CD workflow.
