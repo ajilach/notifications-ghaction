@@ -17,6 +17,9 @@ inputs:
   workflow_run_id:
     required: false
     description: ID of the previous workflow run
+  deploy_flag:
+    required: false
+    description: Deployed artefacts to maven and Kubernetes
 runs:
   using: "composite"
 
@@ -42,7 +45,8 @@ runs:
           "github_repo": "https://github.com/${{ github.repository }}",
           "github_trigger": "${{ github.event_name }}",
           "github_repo_branch": "${{ github.ref }}",
-          "github_actor": "${{ github.triggering_actor }}"
+          "github_actor": "${{ github.triggering_actor }}",
+          "deploy_flag": "${{ inputs.deploy_flag }}"
         }
     env:
       SLACK_WEBHOOK_URL: ${{ env.SLACK_WEBHOOK_URL }}
