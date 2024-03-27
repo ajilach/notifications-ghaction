@@ -26,7 +26,7 @@ runs:
   steps:
   - name: Load notification secrets
     id: op-load-repo-secrets
-    uses: 1password/load-secrets-action@v1.3.2
+    uses: 1password/load-secrets-action@v2.0.0
     env:
       OP_SERVICE_ACCOUNT_TOKEN: ${{ inputs.op_service_account_token }}
       SLACK_WEBHOOK_URL: op://ajila_CICD/SLACK-GITHUB_NOTIFICATIONS/github-action-notification
