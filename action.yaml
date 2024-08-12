@@ -7,16 +7,34 @@ inputs:
   slack_channel_id:
     required: true
     description: Slack channel ID for notifications
+  job:
+    required: false
+    description: Job of the calling workflow
+    default: ${{ github.job }}
   job_status:
     required: false
     description: Status of the calling workflow
+    default: ${{ job.status }}
   workflow_completion_notification:
     required: false
+    description: Send notification on workflow run
     default: "false"
-    description: send notification on workflow run
+  repository:
+    required: false
+    description: Name of the git repository to notify for
+    default: ${{ github.repository }}
+  repository_branch:
+    required: false
+    description: Name of the git repository branch to notify for
+    default: ${{ github.ref }}
+  workflow:
+    required: false
+    description: Name of the workflow to notify for
+    default: ${{ github.workflow }}
   workflow_run_id:
     required: false
     description: ID of the previous workflow run
+    default: ${{ github.run_id }}
   deploy_flag:
     required: false
     description: Deployed artefacts to maven and Kubernetes
@@ -33,18 +51,18 @@ runs:
 
   - name: Notify status on Slack
     if: inputs.workflow_completion_notification == 'true'
-    uses: slackapi/slack-github-action@v1.25.0
+    uses: slackapi/slack-github-action@v1.26.0
     with:
       payload: |
         {
           "channel_id": "${{ inputs.slack_channel_id }}",
-          "title": "The workflow '${{ github.workflow }}' completed with status *${{ job.status }}* for repo ${{ github.repository }}",
-          "job_status": "${{ job.status }}",
-          "job_name": "${{ github.job }}",
-          "workflow_run": "https://github.com/${{ github.repository }}/actions/runs/${{ inputs.workflow_run_id }}",
-          "github_repo": "https://github.com/${{ github.repository }}",
+          "title": "The workflow '${{ inputs.workflow }}' completed with status *${{ inputs.job_status }}* for repo ${{ inputs.repository }}",
+          "job_status": "n/a",
+          "job_name": "n/a",
+          "workflow_run": "https://github.com/${{ inputs.repository }}/actions/runs/${{ inputs.workflow_run_id }}",
+          "github_repo": "https://github.com/${{ inputs.repository }}",
           "github_trigger": "${{ github.event_name }}",
-          "github_repo_branch": "${{ github.ref }}",
+          "github_repo_branch": "${{ inputs.repository_branch }}",
           "github_actor": "${{ github.triggering_actor }}",
           "deploy_flag": "${{ inputs.deploy_flag }}"
         }
@@ -53,18 +71,18 @@ runs:
 
   - name: Send Slack message on failure
     if: inputs.job_status == 'failure'
-    uses: slackapi/slack-github-action@v1.25.0
+    uses: slackapi/slack-github-action@v1.26.0
     with:
       payload: |
         {
           "channel_id": "${{ inputs.slack_channel_id }}",
-          "title": ":red_circle: job '${{ github.job }}' *failed* for repo ${{ github.repository }}",
-          "job_status": "${{ job.status }}",
-          "job_name": "${{ github.job }}",
-          "workflow_run": "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}",
-          "github_repo": "https://github.com/${{ github.repository }}",
+          "title": ":red_circle: job '${{ inputs.job }}' *failed* for repo ${{ inputs.repository }}",
+          "job_status": "${{ inputs.job_status }}",
+          "job_name": "${{ inputs.job }}",
+          "workflow_run": "https://github.com/${{ inputs.repository }}/actions/runs/${{ inputs.workflow_run_id }}",
+          "github_repo": "https://github.com/${{ inputs.repository }}",
           "github_trigger": "${{ github.event_name }}",
-          "github_repo_branch": "${{ github.ref }}",
+          "github_repo_branch": "${{ inputs.repository_branch }}",
           "github_actor": "${{ github.triggering_actor }}"
         }
     env:
