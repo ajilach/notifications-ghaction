@@ -41,7 +41,7 @@ name: Post Hook Workflow
 
 on:
   workflow_run:
-    workflows: ["Workflow test"]
+    workflows: ["Workflow name to check status on"]
     types:
       - completed
 
@@ -56,14 +56,18 @@ jobs:
           op_service_account_token: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
           slack_channel_id: C064M8AVB5G
           workflow_completion_notification: "true"
-          workflow: ${{ github.workflow }}
+          workflow: ${{ github.event.workflow_run.name }}
           workflow_run_id: ${{ github.event.workflow_run.id }}
-          repository: ${{ github.repository }}
-          repository_branch: ${{ github.ref }}
-          job_status: ${{ job.status }}
+          repository: ${{ github.repository_owner }}/${{ github.event.workflow_run.repository.name }}
+          repository_branch: ${{ github.event.workflow_run.head_branch }}
+          job_status: ${{ github.event.workflow_run.conclusion }}
 
 ```
 
+
+## Header information
+
+`workflows`: the `name` of the workflow to watch (first field in the workflow's yaml).
 
 ## Parameters
 
